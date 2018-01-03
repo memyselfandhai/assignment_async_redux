@@ -14,7 +14,7 @@ const parseString = require("xml2js").parseString;
 // Then set const for our API key
 require("dotenv").config();
 const GOODREADS_KEY = process.env.KEY;
-const GOODREADS_SECRET = process.env.SECRET;
+// const GOODREADS_SECRET = process.env.SECRET;
 const baseUrl = "https://goodreads.com";
 
 // Require express and set up app to use it
@@ -49,17 +49,17 @@ function parseJSON(response) {
 }
 
 app.get("/api/goodreads/author/:author", async (req, res, next) => {
-  console.log("Requesting data from GoodReads API...");
+  console.log("Requesting data from GoodReads author API...");
   try {
-    console.log("inside try ");
     let data = await fetch(
       `${baseUrl}/search/index.xml?KEY=${process.env.KEY}&q=${
         req.params.author
       }&search[field]=author`
     );
-
-    console.log("data => ", data);
+    // console.log("data => ", data);
     let json = await parseString(data);
+    json = JSON.stringify(json);
+
     res.json(json);
   } catch (error) {
     console.log(error);
@@ -67,17 +67,24 @@ app.get("/api/goodreads/author/:author", async (req, res, next) => {
 });
 
 app.get("/api/goodreads/title/:title", async (req, res, next) => {
-  console.log("Requesting data from GoodReads API...");
+  console.log("Requesting data from GoodReads title API...");
   try {
     let data = await fetch(
       `${baseUrl}/search/index.xml?key=${process.env.KEY}&q=${
         req.params.title
       }&search[field]=title`
     );
+    data = await data.text();
     console.log("data => ", data);
-    let json = await parseString(data);
-    console.log("data => ", data);
-    res.json(json);
+
+    await parseString(data, (err, result) => {
+      result = result.GoodreadsResponse.search;
+      res.json(result);
+      // return result;
+    });
+
+    // json = await JSON.stringify(json);
+    // res.json(json);
   } catch (error) {
     console.log(error);
   }
@@ -87,7 +94,7 @@ app.get("/api/goodreads/title/:title", async (req, res, next) => {
 function errorHandler(err, req, res, next) {
   console.error("Error: ", err.stack);
   res.status(err.response ? err.response.status : 500);
-  res.json({ error: err.message });
+  res.json({error: err.message});
 }
 
 app.use(errorHandler);
