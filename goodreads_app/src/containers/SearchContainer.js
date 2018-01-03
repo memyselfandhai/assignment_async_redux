@@ -1,10 +1,14 @@
-import Search from "../components/Search";
-import React, { Component } from "react";
+import React, {Component} from "react";
+
+//custom redux and react stuff
 import serialize from "form-serialize";
+import Search from "../components/Search";
+import {search} from "../actions";
+import {bindActionCreators} from "redux";
 
 //*redux store connection stuff
 // Import the connect function from React-Redux
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 
 class SearchContainer extends Component {
   constructor(props) {
@@ -15,7 +19,7 @@ class SearchContainer extends Component {
     e.preventDefault();
 
     const form = e.target;
-    const data = serialize(form, { hash: true });
+    const data = serialize(form, {hash: true});
 
     dispatch(createItem(data));
     form.reset();
@@ -28,17 +32,14 @@ class SearchContainer extends Component {
 // Map dispatch to props to create a submit function that
 // dispatches creating a puppy
 const mapDispatchToProps = dispatch => {
-  return {
-    onSubmit: e => {
-      e.preventDefault();
-
-      const form = e.target;
-      const data = serialize(form, { hash: true });
-
-      dispatch(createItem(data));
-      form.reset();
-    }
+  // Create an object with the action creators
+  // (or, import them as a named object)
+  const actions = {
+    search
   };
+
+  // Returns exactly the same code as above
+  return bindActionCreators(actions, dispatch);
 };
 
 //*redux store connection stuff
@@ -46,4 +47,4 @@ const mapDispatchToProps = dispatch => {
 // with all the new props. We don't need to map state to
 // props so we just send `null` in its place.
 
-export default connect(null, mapDispatchToProps)(AddItemContainer);
+export default connect(null, mapDispatchToProps)(SearchContainer);
