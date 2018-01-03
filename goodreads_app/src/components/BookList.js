@@ -1,18 +1,22 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
-const BookList = ({books}) => {
+const BookList = ({ books }) => {
   return (
     <div className="row">
       {books.map(book => {
         return (
-          <div
-            key={book.best_book[0].small_image_url[0]}
-            className="col-xs-4 card"
-          >
+          <div key={Math.random()} className="col-md-3 offset-md-1">
             <img src={book.best_book[0].small_image_url[0]} />
-            <p> Title: {book.best_book[0].title[0]} </p>
-            <p> Author: {book.best_book[0].author[0].name[0]} </p>
+            <a
+              href={
+                "http://www.goodreads.com/book/show/" +
+                book.best_book[0].id[0]._
+              }
+            >
+              <div> Title: {book.best_book[0].title[0]} </div>
+            </a>
+            <div> Author: {book.best_book[0].author[0].name[0]} </div>
           </div>
         );
       })}

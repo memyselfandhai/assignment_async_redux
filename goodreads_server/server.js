@@ -88,11 +88,12 @@ app.get("/api/goodreads/title/:title ", async (req, res, next) => {
 
 app.get("/api/goodreads/all/:searchterm", async (req, res, next) => {
   console.log("Requesting data from GoodReads author API...");
+  console.log("search term => ", req.params.searchterm);
   try {
     let data = await fetch(
       `${baseUrl}/search/index.xml?key=${process.env.KEY}&q=${
         req.params.searchterm
-      }&search[field]=author`
+      }`
     );
     data = await data.text();
 

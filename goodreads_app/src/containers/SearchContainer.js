@@ -1,13 +1,13 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 
 //custom redux and react stuff
 import serialize from "form-serialize";
 import Search from "../components/Search";
-import {searchAction} from "../actions";
+import { searchAction } from "../actions";
 
 //*redux store connection stuff
 // Import the connect function from React-Redux
-import {connect} from "react-redux";
+import { connect } from "react-redux";
 
 class SearchContainer extends Component {
   constructor(props) {
@@ -26,7 +26,8 @@ const mapDispatchToProps = dispatch => {
       e.preventDefault();
 
       const form = e.target;
-      const data = serialize(form, {hash: true});
+      let data = serialize(form, { hash: true });
+      data = data.search;
       console.log("data => ", data);
       dispatch(searchAction(data));
       form.reset();
