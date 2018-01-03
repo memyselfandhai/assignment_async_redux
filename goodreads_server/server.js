@@ -52,15 +52,16 @@ app.get("/api/goodreads/author/:author", async (req, res, next) => {
   console.log("Requesting data from GoodReads author API...");
   try {
     let data = await fetch(
-      `${baseUrl}/search/index.xml?KEY=${process.env.KEY}&q=${
+      `${baseUrl}/search/index.xml?key=${process.env.KEY}&q=${
         req.params.author
       }&search[field]=author`
     );
-    // console.log("data => ", data);
-    let json = await parseString(data);
-    json = JSON.stringify(json);
+    data = await data.text();
 
-    res.json(json);
+    await parseString(data, (err, result) => {
+      result = result.GoodreadsResponse.search;
+      res.json(result);
+    });
   } catch (error) {
     console.log(error);
   }
@@ -75,16 +76,11 @@ app.get("/api/goodreads/title/:title", async (req, res, next) => {
       }&search[field]=title`
     );
     data = await data.text();
-    console.log("data => ", data);
 
     await parseString(data, (err, result) => {
       result = result.GoodreadsResponse.search;
       res.json(result);
-      // return result;
     });
-
-    // json = await JSON.stringify(json);
-    // res.json(json);
   } catch (error) {
     console.log(error);
   }
@@ -94,7 +90,7 @@ app.get("/api/goodreads/title/:title", async (req, res, next) => {
 function errorHandler(err, req, res, next) {
   console.error("Error: ", err.stack);
   res.status(err.response ? err.response.status : 500);
-  res.json({error: err.message});
+  res.json({ error: err.message });
 }
 
 app.use(errorHandler);
