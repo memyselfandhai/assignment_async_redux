@@ -1,19 +1,20 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
 
-const BookList = ({ books }) => {
+const BookList = ({books}) => {
   return (
     <div className="row">
       {books.map(book => {
-        <div className="col-xs-4 card">
-          <img src={book.best_book[0].small_image_url} />
-          <p> Title: {book.best_book[0].title} </p>
-          <p> Author: {book.best_book[0].author} </p>
-        </div>;
+        return (
+          <div className="col-xs-4 card">
+            <img src={book.best_book[0].small_image_url[0]} />
+            <p> Title: {book.best_book[0].title[0]} </p>
+            <p> Author: {book.best_book[0].author[0].name[0]} </p>
+          </div>
+        );
       })}
     </div>
   );
 };
 
-export default Booklist;
-
+export default BookList;

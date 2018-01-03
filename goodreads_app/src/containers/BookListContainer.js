@@ -1,43 +1,19 @@
-import React, { Component } from "react";
-
 //custom redux and react stuff
-import serialize from "form-serialize";
-import Search from "../components/Search";
-import { searchAction } from "../actions";
-import { bindActionCreators } from "redux";
+import BookList from "../components/BookList";
 
 //*redux store connection stuff
-// Import the connect function from React-Redux
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 
-class BookListContainer extends Component {
-  constructor(props) {
-    super();
-  }
-
-  render() {
-    return <Booklist books={books} />;
-  }
-}
-// Map dispatch to props to create a submit function that
-// dispatches creating a puppy
-const mapDispatchToProps = dispatch => {
+//*redux store connection stuff
+const mapStateToProps = state => {
+  // Pass in all puppies and the value of the current filter
+  // to get the correct set of puppies to pass to props
   return {
-    onSubmit: e => {
-      e.preventDefault();
-
-      const form = e.target;
-      const data = serialize(form, { hash: true });
-      console.log("data => ", data);
-      dispatch(searchAction(data));
-      form.reset();
-    }
+    books: state.books
   };
 };
 
 //*redux store connection stuff
-// Generate the AddPuppyContainer which renders AddPuppy
-// with all the new props. We don't need to map state to
-// props so we just send `null` in its place.
+const BookListContainer = connect(mapStateToProps, null)(BookList);
 
-export default connect(null, mapDispatchToProps)(SearchContainer);
+export default BookListContainer;
