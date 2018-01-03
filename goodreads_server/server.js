@@ -67,7 +67,7 @@ app.get("/api/goodreads/author/:author", async (req, res, next) => {
   }
 });
 
-app.get("/api/goodreads/title/:title", async (req, res, next) => {
+app.get("/api/goodreads/title/:title ", async (req, res, next) => {
   console.log("Requesting data from GoodReads title API...");
   try {
     let data = await fetch(
@@ -79,6 +79,25 @@ app.get("/api/goodreads/title/:title", async (req, res, next) => {
 
     await parseString(data, (err, result) => {
       result = result.GoodreadsResponse.search;
+      res.json(result);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/goodreads/all/:searchterm", async (req, res, next) => {
+  console.log("Requesting data from GoodReads author API...");
+  try {
+    let data = await fetch(
+      `${baseUrl}/search/index.xml?key=${process.env.KEY}&q=${
+        req.params.searchterm
+      }&search[field]=author`
+    );
+    data = await data.text();
+
+    await parseString(data, (err, result) => {
+      result = result.GoodreadsResponse.search[0].results[0].work;
       res.json(result);
     });
   } catch (error) {

@@ -10,13 +10,13 @@ import { bindActionCreators } from "redux";
 // Import the connect function from React-Redux
 import { connect } from "react-redux";
 
-class SearchContainer extends Component {
+class BookListContainer extends Component {
   constructor(props) {
     super();
   }
 
   render() {
-    return <Search onSubmit={this.props.onSubmit} />;
+    return <Booklist books={books} />;
   }
 }
 // Map dispatch to props to create a submit function that
